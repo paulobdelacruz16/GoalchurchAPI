@@ -1,14 +1,27 @@
 import express from "express";
 import mongoose from "mongoose";
-import bodyParser from "body-parser";
-import routes from "./src/routes/crmRoutes";
 require('dotenv').config();
+// import routes from "./src/routes/books";
 
+import bodyParser from "body-parser";
+
+import routes from "./src/routes/books";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
+//bodyparser setup
+app.use(bodyParser.json());
+// app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// routes(app);
+
+//routes
+// app.use('/', routes);
+
+
 // mongoose connection
-mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true}).then(() => {
     console.log("connected to mongodb atlas");
 }).catch(error => {
