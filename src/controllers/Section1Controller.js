@@ -30,5 +30,32 @@ const getSection1 = (req,res) => {
     });
 };
 
-module.exports = {postSection1, getSection1};
+ const getSection1WithID = (req, res) => {
+  Section1Model.findById(req.params.sectionId, (err, data) => {
+      if (err) {
+          res.send(err);
+      }
+      res.json(data);
+  });
+};
+
+ const updateSection1 = (req, res) => {
+  Section1Model.findOneAndUpdate({ _id: req.params.sectionId}, req.body, { new: true }, (err, data) => {
+      if (err) {
+          res.send(err);
+      }
+      res.json(data);
+  });
+};
+
+  const deleteSection1 = (req, res) => {
+    Section1Model.remove({ _id: req.params.sectionId }, (err) => {
+      if (err) {
+          res.send(err);
+      }
+      res.json({ message: 'Successfully deleted Data'});
+  });
+};
+
+module.exports = {postSection1, getSection1, updateSection1, getSection1WithID, deleteSection1};
 
