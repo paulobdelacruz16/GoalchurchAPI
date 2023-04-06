@@ -1,25 +1,17 @@
-import express from "express";
-import mongoose from "mongoose";
-import winston from "winston";
+const express = require('express');
+const mongoose = require('mongoose');
+const winston = require('winston');
+const bodyParser = require("body-parser");
+const {routes} = require("./routes");
 require("dotenv").config();
-// import routes from "./src/routes/books";
-
-import bodyParser from "body-parser";
-
-import routes from "./src/routes/books";
-
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 //bodyparser setup
 app.use(bodyParser.json());
 // app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// routes(app);
-
-//routes
-// app.use('/', routes);
+routes(app);
 
 const logger = winston.createLogger({
   level: "info",
