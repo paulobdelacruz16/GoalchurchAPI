@@ -24,7 +24,7 @@ const Section1Schema = new mongoose.Schema({
   },
 });
 
-const validateSection1 = (book) => {
+const validateSection1 = (item) => {
   const schema = yup.object().shape({
     name: yup.string().required().min(3).max(50),
     description: yup.string().required().min(3).max(40),
@@ -33,8 +33,8 @@ const validateSection1 = (book) => {
   });
 
   return schema
-    .validate(book)
-    .then((book) => book)
+    .validate(item)
+    .then((item) => item)
     .catch((error) => {
         console.log(error)
         return {message:error.message};
