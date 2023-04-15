@@ -1,5 +1,5 @@
 const { getSection1, postSection1,getSection1WithID,updateSection1,deleteSection1  } = require("./src/controllers/Section1Controller");
-const { postloginCredential, getloginCredential, updateloginCredential, getloginCredentialWithID, deleteloginCredential  } = require("./src/controllers/LoginCredential");
+const { postloginCredential, getloginCredential, updateloginCredential, getloginCredentialWithID, deleteloginCredential, findByloginCredential  } = require("./src/controllers/LoginCredential");
 
 const routes = (app) => {
   app.route('/api/section1')
@@ -26,6 +26,8 @@ const routes = (app) => {
       next();  
   }, getloginCredential)
   .post(postloginCredential);
+
+  app.route('/api/findByloginCredential').post(findByloginCredential);
 
   app.route('/api/loginCredential/:credentialId')
   .get((req,res, next) => {

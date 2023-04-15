@@ -54,5 +54,5 @@ app.get("/", (req, res) =>
 );
 
 app.listen(PORT, () => {
-  logger.info("Your server is running on port ${PORT}")
+  logger.info(`Your server is running on port ${PORT}`)
 });

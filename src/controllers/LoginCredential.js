@@ -62,5 +62,15 @@ const getloginCredential = (req,res) => {
   });
 };
 
-module.exports = {postloginCredential, getloginCredential, updateloginCredential, getloginCredentialWithID, deleteloginCredential};
+const findByloginCredential = (req,res) => {
+    loginCredentialModel.find({username: req.body.username, password: req.body.password}, (err, data) => { 
+        if (err) {
+            res.send(err);
+        }
+        res.status(200).send({'message': data});
+
+    });
+};
+
+module.exports = {postloginCredential, getloginCredential, updateloginCredential, getloginCredentialWithID, deleteloginCredential, findByloginCredential};
 
