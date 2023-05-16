@@ -1,4 +1,5 @@
 const { Section1Model, validateSection1 } = require("../models/section1");
+const { HomeModel } = require("../models/homeContent");
 
 const postSection1 = async (req, res) => {
     const error = await validateSection1(req.body);
