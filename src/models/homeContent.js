@@ -1,28 +1,150 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const yup = require("yup");
 
-const HomeSchema = new mongoose.Schema({
-  name: { type: String, required: true, minlength: 3, maxlength: 50 },
-  section1: [{ type: Schema.Types.ObjectId, ref: "section1" }],
-  section2: [{ type: Schema.Types.ObjectId, ref: "section2" }],
+const cardCarousel = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  image: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  url: {
+    type: String,
+    required: true,
+  },
+});
+
+const cardSermon = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  author: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  image: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  url: {
+    type: String,
+    required: true,
+  },
+});
+
+const cardEvent = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  description: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  url: {
+    type: String,
+    required: true,
+  },
 });
 
 
-const validateHome = (item) => {
-  const schema = yup.object().shape({
-    name: yup.string().required().min(3).max(50),
-    section1: yup.array(),
-    section2: yup.array()
-  });
+const section1 = new mongoose.Schema({
+  card: [cardCarousel],
+});
 
-  return schema
-    .validate(item)
-    .then((item) => item)
-    .catch((error) => {
-        console.log(error)
-        return {message:error.message};
-    });
-};
+const section2 = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  description: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+});
+
+const section3 = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  image: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  description: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  url: {
+    type: String,
+    required: true,
+  },
+});
+
+const section4 = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  description: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  card: [cardSermon],
+});
+
+const section5 = new mongoose.Schema({
+  verse: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  description: {
+    type: String,
+    required: true,
+    minlength: 3,
+  }
+});
+
+const section6 = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  description: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  card: [cardEvent],
+});
+
+
+const HomeSchema = new mongoose.Schema({
+  section1: section1,
+  section2: section2,
+  section3: section3,
+  section4: section4,
+  section5: section5,
+  section6: section6
+});
+
 exports.HomeModel = new mongoose.model("Home", HomeSchema);
-exports.validateHome = validateHome;

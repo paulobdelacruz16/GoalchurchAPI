@@ -1,21 +1,25 @@
-const { HomeModel, validateHome } = require("../models/homeContent");
+const { HomeModel} = require("../models/homeContent");
 const { Section1Model } = require("../models/section1");
 const { Section2Model } = require("../models/section1");
+
+// validateHome
+const { validateHome } = require("../validation/HomeValidate")
 
 
 
 const postHome = async (req, res) => {
-  console.log('success' ,1234);
   const error = await validateHome(req.body);
-  console.log('error123', error);
   if (error.message){
     res.status(400).send(error.message)
   } 
 
   const homeModel = new HomeModel({
-    name: req.body.name,
-    section1: [],
-    section2: []
+    section1: req.body.section1,
+    section2: req.body.section2,
+    section3: req.body.section3,
+    section4: req.body.section4,
+    section5: req.body.section5,
+    section6: req.body.section6
   });
 
   homeModel.save().then((err,data) => {
@@ -51,8 +55,8 @@ const getHome = (req,res) => {
         if (err) {
             res.send(err);
         }
-        res.json(data);
-    });
+        res.json(data[0]);
+    }).sort({ _id: 'desc' }) ;
 };
 
  const getHomeWithID = (req, res) => {
@@ -64,6 +68,15 @@ const getHome = (req,res) => {
   });
 };
 
-module.exports = {getHome, getHomeWithID, postHome, updateHome};
+const deleteHomeWithID = (req, res) => {
+  HomeModel.remove({ _id: req.params.id }, (err) => {
+    if (err) {
+        res.send(err);
+    }
+    res.json({ message: 'Successfully deleted Data'});
+});
+};
+
+module.exports = {getHome, getHomeWithID, postHome, updateHome, deleteHomeWithID};
 
 

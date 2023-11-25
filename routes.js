@@ -1,9 +1,11 @@
 const { getSection1, postSection1,getSection1WithID,updateSection1,deleteSection1  } = require("./src/controllers/Section1Controller");
 const { getSection2, postSection2,getSection2WithID,updateSection2,deleteSection2  } = require("./src/controllers/Section2Controller");
+const { getSection3, postSection3,getSection3WithID,updateSection3,deleteSection3  } = require("./src/controllers/Section3Controller");
+
 
 const { postloginCredential, getloginCredential, updateloginCredential, getloginCredentialWithID, deleteloginCredential, findByloginCredential  } = require("./src/controllers/LoginCredential");
 
-const { getHome,getHomeWithID,postHome,updateHome  } = require("./src/controllers/HomeController");
+const { getHome,getHomeWithID,postHome,updateHome,deleteHomeWithID  } = require("./src/controllers/HomeController");
 
 const routes = (app) => {
   app.route('/api/section1')
@@ -66,7 +68,7 @@ const routes = (app) => {
       console.log(`Request type: ${req.method}`)
       next();  
   }, getHome)
-  .post(postHome);
+  .post(postHome)
 
   app.route('/api/home/:id')
   .get((req,res, next) => {
@@ -74,7 +76,16 @@ const routes = (app) => {
       console.log(`Request type: ${req.method}`)
       next();  
   }, getHomeWithID)
-  .put(updateHome)
+  .put(updateHome).delete(deleteHomeWithID);
+
+
+  app.route('/api/section3')
+  .get((req,res, next) => {
+      console.log(`Request from: ${req.originalUrl}`)
+      console.log(`Request type: ${req.method}`)
+      next();  
+  }, getSection3)
+  .post(postSection3);
 }
 
 module.exports = {routes};
