@@ -16,9 +16,15 @@ const validateHome = (item) => {
     }),
     section3: yup.object({
       title: yup.string().required(),
-      image: yup.string().required(),
       description: yup.string().required(),
-      url: yup.string().required(),
+      card: yup.array(
+        yup.object({
+          title: yup.string().required(),
+          image: yup.string().required(),
+          description: yup.string().required(),
+          url: yup.string().required(),
+        })
+      ),
     }),
     section4: yup.object({
       title: yup.string().required(),
@@ -33,8 +39,12 @@ const validateHome = (item) => {
       ),
     }),
     section5: yup.object({
-      verse: yup.string().required(),
-      description: yup.string().required()
+      card: yup.array(
+        yup.object({
+          verse: yup.string().required(),
+          description: yup.string().required(),
+        })
+      )
     }),
     section6: yup.object({
       title: yup.string().required(),

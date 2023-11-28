@@ -39,6 +39,28 @@ const cardSermon = new mongoose.Schema({
   },
 });
 
+const cardServices = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  description: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  image: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  url: {
+    type: String,
+    required: true,
+  },
+});
+
 const cardEvent = new mongoose.Schema({
   title: {
     type: String,
@@ -54,6 +76,20 @@ const cardEvent = new mongoose.Schema({
     type: String,
     required: true,
   },
+});
+
+
+const verseCard = new mongoose.Schema({
+  verse: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  description: {
+    type: String,
+    required: true,
+    minlength: 3,
+  }
 });
 
 
@@ -80,20 +116,12 @@ const section3 = new mongoose.Schema({
     required: true,
     minlength: 3,
   },
-  image: {
-    type: String,
-    required: true,
-    minlength: 3,
-  },
   description: {
     type: String,
     required: true,
     minlength: 3,
   },
-  url: {
-    type: String,
-    required: true,
-  },
+  card: [cardServices],
 });
 
 const section4 = new mongoose.Schema({
@@ -111,16 +139,7 @@ const section4 = new mongoose.Schema({
 });
 
 const section5 = new mongoose.Schema({
-  verse: {
-    type: String,
-    required: true,
-    minlength: 3,
-  },
-  description: {
-    type: String,
-    required: true,
-    minlength: 3,
-  }
+  card: [verseCard],
 });
 
 const section6 = new mongoose.Schema({
