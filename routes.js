@@ -6,6 +6,10 @@ const { getSection3, postSection3,getSection3WithID,updateSection3,deleteSection
 const { postloginCredential, getloginCredential, updateloginCredential, getloginCredentialWithID, deleteloginCredential, findByloginCredential  } = require("./src/controllers/LoginCredential");
 
 const { getHome,getHomeWithID,postHome,updateHome,deleteHomeWithID  } = require("./src/controllers/HomeController");
+const { getSermon,postSermon,deleteSermonWithID } = require("./src/controllers/SermonController");
+const { getEvent,postEvent,deleteEventWithID } = require("./src/controllers/EventsController");
+
+
 
 const routes = (app) => {
   app.route('/api/section1')
@@ -86,6 +90,37 @@ const routes = (app) => {
       next();  
   }, getSection3)
   .post(postSection3);
+
+  app.route('/api/sermon')
+  .get((req,res, next) => {
+      console.log(`Request from: ${req.originalUrl}`)
+      console.log(`Request type: ${req.method}`)
+      next();  
+  }, getSermon)
+  .post(postSermon)
+
+  app.route('/api/sermon/:id')
+  .get((req,res, next) => {
+      console.log(`Request from: ${req.originalUrl}`)
+      console.log(`Request type: ${req.method}`)
+      next();  
+  }).delete(deleteSermonWithID);
+
+  
+  app.route('/api/events')
+  .get((req,res, next) => {
+      console.log(`Request from: ${req.originalUrl}`)
+      console.log(`Request type: ${req.method}`)
+      next();  
+  }, getEvent)
+  .post(postEvent)
+
+  app.route('/api/events/:id')
+  .get((req,res, next) => {
+      console.log(`Request from: ${req.originalUrl}`)
+      console.log(`Request type: ${req.method}`)
+      next();  
+  }).delete(deleteEventWithID);
 }
 
 module.exports = {routes};
