@@ -54,7 +54,7 @@ const getByPageName = (req,res) => {
 
 const updateDynamicPage = (req, res) => {
   const filter = { 'section1.page_name': req.params.id};
-  const body =  {'section1': req.body};
+  const body =  req.body;
   PageContentModel.findOneAndUpdate(filter, body, { new: true }, (err, data) => {
       if (err) {
           res.send(err);

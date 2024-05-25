@@ -12,7 +12,7 @@ const section1 = new mongoose.Schema({
     required: true,
     minlength: 3,
   },
-  description: {
+  paragraph: {
     type: String,
     required: true,
     minlength: 3,

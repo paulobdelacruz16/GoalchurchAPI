@@ -4,7 +4,7 @@ const validatePageContent = (item) => {
     section1: yup.object({
       page_name: yup.string().required(),
       title: yup.string().required(),
-      description: yup.string().required(),
+      paragraph: yup.string().required(),
       image: yup.string().required()
     }),
   });
