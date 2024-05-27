@@ -1,18 +1,8 @@
 const {
 PageContentModel
 } = require("../models/pageContent");
-const { validatePageContent  } = require("../validation/PageContentValidate");
 const postDynamicPage = async (req, res) => {
-  console.log("req.body", req.body);
-  const error = await validatePageContent(req.body);
-  if (error.message){
-    res.status(400).send(error.message)
-  }
-
-  const selectedModel = new PageContentModel({
-    section1: req.body.section1
-  });
-
+  const selectedModel = new PageContentModel(req.body);
   selectedModel.save().then((err, data) => {
       if (err) {
         res.send(err);
@@ -25,7 +15,6 @@ const postDynamicPage = async (req, res) => {
 };
 
 const getDynamicpage = (req, res) => {
-  
   PageContentModel.find({}, (err, data) => {
     if (err) {
       res.send(err);

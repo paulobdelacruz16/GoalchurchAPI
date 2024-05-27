@@ -93,6 +93,15 @@ const routes = (app) => {
   }, getSection3)
   .post(postSection3);
 
+  app.route('/api/section3/:id')
+  .get((req,res, next) => {
+      console.log(`Request from: ${req.originalUrl}`)
+      console.log(`Request type: ${req.method}`)
+      next();  
+  }, getSection3).delete(deleteSection3);
+
+
+
   app.route('/api/sermon')
   .get((req,res, next) => {
       console.log(`Request from: ${req.originalUrl}`)

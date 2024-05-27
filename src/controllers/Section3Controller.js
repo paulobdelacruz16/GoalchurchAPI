@@ -1,16 +1,8 @@
-const { Section3Model, validateSection3 } = require("../models/section3");
+const { Section3Model } = require("../models/section3");
 
 const postSection3 = async (req, res) => {
   console.log('req.body', req.body);
-    const error = await validateSection3(req.body);
-    console.log('error', error);
-    if (error.message) res.status(400).send(error.message)
-    const section3Model = new Section3Model({
-      title: req.body.title,
-      description: req.body.description,
-      card:  req.body.card
-    });
-
+    const section3Model = new Section3Model(req.body);
     section3Model.save().then((err,data) => {
         if (err) {
           console.log('err', err);
@@ -51,7 +43,7 @@ const getSection3 = (req,res) => {
 };
 
   const deleteSection3 = (req, res) => {
-    Section3Model.remove({ _id: req.params.sectionId }, (err) => {
+    Section3Model.remove({ _id: req.params.id }, (err) => {
       if (err) {
           res.send(err);
       }
