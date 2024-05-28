@@ -23,6 +23,17 @@ const getDynamicpage = (req, res) => {
   }).sort({ _id: "desc" });
 };
 
+const getAllUniquePageName = (req, res) => {
+  PageContentModel.find().distinct('section1.page_name', function(err, data) {
+    if (err) {
+      res.send(err);
+    }
+    console.log('data', data);
+    res.json(data);
+    // ids is an array of all ObjectIds
+});
+};
+
 const deleteDynamicpageWithID = (req, res) => {
   PageContentModel.remove({ _id: req.params.id }, (err) => {
     if (err) {
@@ -52,5 +63,5 @@ const updateDynamicPage = (req, res) => {
   });
 };
 
-module.exports = { postDynamicPage,getDynamicpage,deleteDynamicpageWithID,getByPageName, updateDynamicPage};
+module.exports = { postDynamicPage,getDynamicpage,deleteDynamicpageWithID,getByPageName, updateDynamicPage,getAllUniquePageName};
 

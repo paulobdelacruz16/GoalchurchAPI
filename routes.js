@@ -8,7 +8,7 @@ const { postloginCredential, getloginCredential, updateloginCredential, getlogin
 const { getHome,getHomeWithID,postHome,updateHome,deleteHomeWithID  } = require("./src/controllers/HomeController");
 const { getSermon,postSermon,deleteSermonWithID } = require("./src/controllers/SermonController");
 const { getEvent,postEvent,deleteEventWithID } = require("./src/controllers/EventsController");
-const { postDynamicPage,getDynamicpage,deleteDynamicpageWithID, getByPageName, updateDynamicPage } = require("./src/controllers/PageContentController");
+const { postDynamicPage,getDynamicpage,deleteDynamicpageWithID, getByPageName, updateDynamicPage, getAllUniquePageName } = require("./src/controllers/PageContentController");
 
 
 
@@ -140,6 +140,17 @@ const routes = (app) => {
       next();
   }, getDynamicpage)
   .post(postDynamicPage);
+
+
+  app.route('/api/getAllUniquePageName')
+  .get((req,res, next) => {
+      console.log(`Request from: ${req.originalUrl}`)
+      console.log(`Request type: ${req.method}`)
+      next();
+  }, getAllUniquePageName);
+
+
+  
 
   
   app.route('/api/dynamicPageContent/:id')
