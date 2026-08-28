@@ -149,10 +149,6 @@ const routes = (app) => {
       next();
   }, getAllUniquePageName);
 
-
-  
-
-  
   app.route('/api/dynamicPageContent/:id')
   .get((req,res, next) => {
       console.log(`Request from: ${req.originalUrl}`)

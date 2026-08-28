@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "index.js -d dist",
-    "start": "nodemon ./index.js"
+    "start": "node server.js"
   },
   "author": "Emmanuel Henri",
   "license": "ISC",
