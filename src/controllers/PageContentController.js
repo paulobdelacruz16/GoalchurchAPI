@@ -43,8 +43,17 @@ const deleteDynamicpageWithID = (req, res) => {
   });
 };
 
+// const getByPageName = (req,res) => {
+//   PageContentModel.find({'section1.page_name': req.params.id}, (err, data) => {
+//         if (err) {
+//             res.send(err);
+//         }
+//         res.json(data[0]);
+//     }).sort({ _id: 'desc' }) ;
+// };
+
 const getByPageName = (req,res) => {
-  PageContentModel.find({'section1.page_name': req.params.id}, (err, data) => {
+  PageContentModel.find({'_id': req.params.id}, (err, data) => {
         if (err) {
             res.send(err);
         }
@@ -53,7 +62,7 @@ const getByPageName = (req,res) => {
 };
 
 const updateDynamicPage = (req, res) => {
-  const filter = { 'section1.page_name': req.params.id};
+  const filter = { '_id': req.params.id};
   const body =  req.body;
   PageContentModel.findOneAndUpdate(filter, body, { new: true }, (err, data) => {
       if (err) {
