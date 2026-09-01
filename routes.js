@@ -9,11 +9,9 @@ const { getHome, getHomeWithID, postHome, updateHome, deleteHomeWithID } = requi
 const { getSermon, postSermon, deleteSermonWithID } = require("./src/controllers/SermonController");
 const { getEvent, postEvent, deleteEventWithID } = require("./src/controllers/EventsController");
 const { postDynamicPage, getDynamicpage, deleteDynamicpageWithID, getByPageName, updateDynamicPage, getAllUniquePageName } = require("./src/controllers/PageContentController");
-const { postFormData, getAllFormData, deleteFormDataWithID, getFormDataById, updateFormData, getAllUniqueformData } = require("./src/controllers/FormDataController");
+const { postFormData, getAllFormData, deleteFormDataWithID, getFormDataById, updateFormData, getAllUniqueformData, getAllFormLatestDataByformId,getAllFormDatabyformId } = require("./src/controllers/FormDataController");
 
-const {  postFormTemplate, getAllFormTemplate, deleteFormTemplateWithID, getFormTemplateById, updateFormTemplate } = require("./src/controllers/FormTemplateController");
-
-
+const { postFormTemplate, getAllFormTemplate, deleteFormTemplateWithID, getFormTemplateById, updateFormTemplate } = require("./src/controllers/FormTemplateController");
 
 const routes = (app) => {
     app.route('/api/section1')
@@ -178,6 +176,20 @@ const routes = (app) => {
         }, getFormTemplateById).delete(deleteFormTemplateWithID)
         .put(updateFormTemplate);
 
+    app.route('/api/formdata/latest')
+        .get((req, res, next) => {
+            console.log(`Request from: ${req.originalUrl}`)
+            console.log(`Request type: ${req.method}`)
+            next();
+        }, getAllFormLatestDataByformId);
+
+    app.route('/api/formdata/formid/:formId')
+        .get((req, res, next) => {
+            console.log(`Request from: ${req.originalUrl}`)
+            console.log(`Request type: ${req.method}`)
+            next();
+        }, getAllFormDatabyformId);
+
     app.route('/api/formdata/:id')
         .get((req, res, next) => {
             console.log(`Request from: ${req.originalUrl}`)
@@ -193,6 +205,8 @@ const routes = (app) => {
             next();
         }, getAllFormData)
         .post(postFormData);
+
+
 }
 
 module.exports = { routes };
