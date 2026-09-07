@@ -66,7 +66,7 @@ const updateFormData = (req, res) => {
 };
 
 
-const getAllFormLatestDataByformId = async (req, res) => {
+const getGroupByFormIdLatestData = async (req, res) => {
   try {
     const data = await formDataContentModel.aggregate([
       { $sort: { submittedAt: -1 } }, // sort newest first
@@ -101,8 +101,22 @@ const getAllFormDatabyformId = async (req, res) => {
 };
 
 
+const getLatestFormDataById = (req, res) => {
+  formDataContentModel
+    .findOne({ formName: req.params.formName })   // filter by formName
+    .sort({ submittedAt: -1 })         // sort newest first
+    .exec((err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      res.json(data);                  // directly return the latest doc
+    });
+};
 
 
 
-module.exports = { postFormData, getAllFormData, deleteFormDataWithID, getFormDataById, updateFormData, getAllUniqueformData, getAllFormLatestDataByformId, getAllFormDatabyformId };
+
+
+
+module.exports = { postFormData, getAllFormData, deleteFormDataWithID, getFormDataById, updateFormData, getAllUniqueformData, getGroupByFormIdLatestData, getAllFormDatabyformId, getLatestFormDataById };
 
