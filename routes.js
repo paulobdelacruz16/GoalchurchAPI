@@ -9,7 +9,7 @@ const { getHome, getHomeWithID, postHome, updateHome, deleteHomeWithID } = requi
 const { getSermon, postSermon, deleteSermonWithID } = require("./src/controllers/SermonController");
 const { getEvent, postEvent, deleteEventWithID } = require("./src/controllers/EventsController");
 const { postDynamicPage, getDynamicpage, deleteDynamicpageWithID, getByPageName, updateDynamicPage, getAllUniquePageName } = require("./src/controllers/PageContentController");
-const { postFormData, getAllFormData, deleteFormDataWithID, getFormDataById, updateFormData, getAllUniqueformData, getGroupByFormIdLatestData, getAllFormDatabyformId, getLatestFormDataById } = require("./src/controllers/FormDataController");
+const { postFormData, getAllFormData, deleteFormDataWithID, getFormDataById, updateFormData, getAllUniqueformData, getGroupByFormIdLatestData, getAllFormDatabyformId, getLatestFormDataById, deleteFormDataWithFormName,getAllFormDatabyformName } = require("./src/controllers/FormDataController");
 
 const { postFormTemplate, getAllFormTemplate, deleteFormTemplateWithID, getFormTemplateById, updateFormTemplate } = require("./src/controllers/FormTemplateController");
 
@@ -196,6 +196,14 @@ const routes = (app) => {
             console.log(`Request type: ${req.method}`)
             next();
         }, getAllFormDatabyformId);
+
+    app.route('/api/formdata/formname/:formname')
+        .get((req, res, next) => {
+            console.log(`Request from: ${req.originalUrl}`)
+            console.log(`Request type: ${req.method}`)
+            next();
+        },getAllFormDatabyformName).delete(deleteFormDataWithFormName)
+
 
     app.route('/api/formdata/:id')
         .get((req, res, next) => {

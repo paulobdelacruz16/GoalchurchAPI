@@ -3,59 +3,64 @@ const {
 } = require("../models/formTemplateContent");
 
 const postFormTemplate = async (req, res) => {
-  const selectedModel = new formTemplateContentModel(req.body);
-  selectedModel.save().then((err, data) => {
-    if (err) {
-      res.send(err);
-    }
+  try {
+    const selectedModel = new formTemplateContentModel(req.body);
+    const data = await selectedModel.save();
     res.send(data);
-  })
-    .catch((error) => {
-      res.status(500).send({ status: error });
-    });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
-const getAllFormTemplate = (req, res) => {
-  formTemplateContentModel.find({}, (err, data) => {
-    if (err) {
-      res.send(err);
-    }
+const getAllFormTemplate = async (req, res) => {
+  try {
+    const data = await formTemplateContentModel.find({}).sort({ _id: "desc" });
     res.json(data);
-  }).sort({ _id: "desc" });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
-const deleteFormTemplateWithID = (req, res) => {
-  formTemplateContentModel.remove({ _id: req.params.id }, (err) => {
-    if (err) {
-      res.send(err);
-    }
+const deleteFormTemplateWithID = async (req, res) => {
+  try {
+    await formTemplateContentModel.deleteOne({ _id: req.params.id });
     res.json({ message: "Successfully deleted Form Template" });
-  });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
+const getFormTemplateById = async (req, res) => {
+  try {
+    const data = await formTemplateContentModel
+      .find({ _id: req.params.id })
+      .sort({ _id: "desc" });
 
-const getFormTemplateById = (req, res) => {
-  formTemplateContentModel.find({ '_id': req.params.id }, (err, data) => {
-    if (err) {
-      res.send(err);
+    if (!data || data.length === 0) {
+      return res.status(404).json({ message: "No template found" });
     }
+
     res.json(data[0]);
-  }).sort({ _id: 'desc' });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
-const updateFormTemplate = (req, res) => {
-  const filter = { '_id': req.params.id };
-  const body = req.body;
-  formTemplateContentModel.findOneAndUpdate(filter, body, { new: true }, (err, data) => {
-    if (err) {
-      res.send(err);
-    }
+const updateFormTemplate = async (req, res) => {
+  try {
+    const filter = { _id: req.params.id };
+    const body = req.body;
+    const data = await formTemplateContentModel.findOneAndUpdate(filter, body, { new: true });
     res.json(data);
-  });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
-
-  
-
-module.exports = { postFormTemplate, getAllFormTemplate, deleteFormTemplateWithID, getFormTemplateById, updateFormTemplate };
-
+module.exports = {
+  postFormTemplate,
+  getAllFormTemplate,
+  deleteFormTemplateWithID,
+  getFormTemplateById,
+  updateFormTemplate,
+};

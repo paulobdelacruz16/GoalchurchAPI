@@ -3,96 +3,108 @@ const {
 } = require("../models/formDataContent");
 
 const postFormData = async (req, res) => {
-  const selectedModel = new formDataContentModel(req.body);
-  selectedModel.save().then((err, data) => {
-    if (err) {
-      res.send(err);
-    }
+  try {
+    const selectedModel = new formDataContentModel(req.body);
+    const data = await selectedModel.save();
     res.send(data);
-  })
-    .catch((error) => {
-      res.status(500).send({ status: error });
-    });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
-const getAllFormData = (req, res) => {
-  formDataContentModel.find({}, (err, data) => {
-    if (err) {
-      res.send(err);
-    }
+const getAllFormData = async (req, res) => {
+  try {
+    const data = await formDataContentModel.find({}).sort({ _id: "desc" });
     res.json(data);
-  }).sort({ _id: "desc" });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
-const getAllUniqueformData = (req, res) => {
-  formDataContentModel.find().distinct('section1.page_name', function (err, data) {
-    if (err) {
-      res.send(err);
-    }
-    console.log('data', data);
+const getAllUniqueformData = async (req, res) => {
+  try {
+    const data = await formDataContentModel.find().distinct("section1.page_name");
+    console.log("data", data);
     res.json(data);
-    // ids is an array of all ObjectIds
-  });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
-const deleteFormDataWithID = (req, res) => {
-  formDataContentModel.remove({ _id: req.params.id }, (err) => {
-    if (err) {
-      res.send(err);
-    }
+const deleteFormDataWithID = async (req, res) => {
+  try {
+    await formDataContentModel.deleteOne({ _id: req.params.id });
     res.json({ message: "Successfully deleted Data" });
-  });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
+const getFormDataById = async (req, res) => {
+  try {
+    const data = await formDataContentModel
+      .find({ _id: req.params.id })
+      .sort({ submittedAt: -1 });
 
-const getFormDataById = (req, res) => {
-  formDataContentModel.find({ '_id': req.params.id }, (err, data) => {
-    if (err) {
-      res.send(err);
+    if (!data || data.length === 0) {
+      return res.status(404).json({ message: "No data found" });
     }
+
     res.json(data[0]);
-  }).sort({ _id: 'desc' });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
-const updateFormData = (req, res) => {
-  const filter = { '_id': req.params.id };
-  const body = req.body;
-  formDataContentModel.findOneAndUpdate(filter, body, { new: true }, (err, data) => {
-    if (err) {
-      res.send(err);
-    }
+const updateFormData = async (req, res) => {
+  try {
+    const filter = { _id: req.params.id };
+    const body = req.body;
+    const data = await formDataContentModel.findOneAndUpdate(filter, body, { new: true });
     res.json(data);
-  });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
-
 
 const getGroupByFormIdLatestData = async (req, res) => {
   try {
     const data = await formDataContentModel.aggregate([
-      { $sort: { submittedAt: -1 } }, // sort newest first
+      { $sort: { submittedAt: -1 } },
       {
         $group: {
-          _id: "$formId",              // group by formId
-          doc: { $first: "$$ROOT" }    // take the latest document
-        }
+          _id: "$formId",
+          doc: { $first: "$$ROOT" },
+        },
       },
-      { $replaceRoot: { newRoot: "$doc" } }, // flatten result
-      { $sort: { submittedAt: -1 } }         // final sort of unique docs
+      { $replaceRoot: { newRoot: "$doc" } },
+      { $sort: { submittedAt: -1 } },
     ]);
-
     res.json(data);
   } catch (err) {
     res.status(500).send(err);
   }
 };
-
 
 const getAllFormDatabyformId = async (req, res) => {
   try {
-    const { formId } = req.params; // or req.query depending on your route
+    const { formId } = req.params;
+    const data = await formDataContentModel.find({ formId }).sort({ submittedAt: -1 });
+    res.json(data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+const getLatestFormDataById = async (req, res) => {
+  try {
     const data = await formDataContentModel
-      .find({ formId })              // filter by formId
-      .sort({ submittedAt: -1 });    // order by submittedAt (newest first)
+      .findOne({ formName: req.params.formName })
+      .sort({ submittedAt: -1 });
+
+    if (!data) {
+      return res.status(404).json({ message: "No data found" });
+    }
 
     res.json(data);
   } catch (err) {
@@ -100,23 +112,35 @@ const getAllFormDatabyformId = async (req, res) => {
   }
 };
 
-
-const getLatestFormDataById = (req, res) => {
-  formDataContentModel
-    .findOne({ formName: req.params.formName })   // filter by formName
-    .sort({ submittedAt: -1 })         // sort newest first
-    .exec((err, data) => {
-      if (err) {
-        return res.status(500).send(err);
-      }
-      res.json(data);                  // directly return the latest doc
-    });
+const deleteFormDataWithFormName = async (req, res) => {
+  try {
+    await formDataContentModel.deleteMany({ formName: req.params.formname });
+    res.json({ message: "Successfully deleted Data" });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
+const getAllFormDatabyformName = async (req, res) => {
+  try {
+    console.log("Fetching form data with formname:", req.params.formname);
+    const data = await formDataContentModel.find({ formName: req.params.formname });
+    res.json(data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 
-
-
-
-
-module.exports = { postFormData, getAllFormData, deleteFormDataWithID, getFormDataById, updateFormData, getAllUniqueformData, getGroupByFormIdLatestData, getAllFormDatabyformId, getLatestFormDataById };
-
+module.exports = {
+  postFormData,
+  getAllFormData,
+  deleteFormDataWithID,
+  getFormDataById,
+  updateFormData,
+  getAllUniqueformData,
+  getGroupByFormIdLatestData,
+  getAllFormDatabyformId,
+  getLatestFormDataById,
+  deleteFormDataWithFormName,
+  getAllFormDatabyformName,
+};
