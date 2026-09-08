@@ -11,7 +11,9 @@ const postloginCredential= async (req, res) => {
     console.log('go here3222', ); 
     const newloginCredentialModel = new loginCredentialModel({
       username: req.body.username,
-      password: req.body.password
+      password: req.body.password,
+      name: req.body.name,
+      role: req.body.role,
     });
 
     console.log('go here', newloginCredentialModel);
