@@ -8,17 +8,42 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const cors = require('cors');
 
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const connectToDatabase = () => {
+  if (!process.env.MONGO_URL) {
+    return Promise.reject(new Error('MONGO_URL is not configured'));
+  }
+
+  if (global.mongoConnection) {
+    return global.mongoConnection;
+  }
+
+  global.mongoConnection = mongoose.connect(process.env.MONGO_URL)
+    .then(() => {
+      logger.info("connected to mongodb atlas");
+    })
+    .catch((error) => {
+      global.mongoConnection = null;
+      logger.error(error.message);
+      throw error;
+    });
+
+  return global.mongoConnection;
+};
+
 // Body parser setup
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: allowedOrigins,
     credentials: true,
   })
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// Routes
-routes(app);
 
 // Logger setup
 const logger = winston.createLogger({
@@ -28,34 +53,25 @@ const logger = winston.createLogger({
       format: winston.format.combine(
         winston.format.colorize({ all: true })
       )
-    }),
-    new winston.transports.File({ filename: 'error.log', level: 'error' })
-  ],
-  exceptionHandlers: [
-    new winston.transports.File({ filename: 'exceptions.log' })
+    })
   ]
 });
 
-// Mongoose connection (fixed)
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => {
-    logger.info("connected to mongodb atlas");
-  })
-  .catch((error) => {
-    logger.error(error.message);
-  });
+connectToDatabase().catch(() => {});
 
 // Serving static files
-app.use(express.static("public"));
+app.use(express.static(require("path").join(__dirname, "public")));
 
-// Routes again (if needed for static endpoints)
 routes(app);
 
 app.get("/", (req, res) =>
   res.send(`Node and express server is running on port ${PORT}`)
 );
 
-app.listen(PORT, () => {
-  logger.info(`Your server is running on port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    logger.info(`Your server is running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
